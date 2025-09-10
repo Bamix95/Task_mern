@@ -4,6 +4,9 @@ import cors from "cors";
 import session from "cookie-session";
 import { config } from "./config/app.config.js";
 import connectDb from "./config/db.config.js";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
+import { asyncHandler } from "./middlewares/asyncHandler.middleware.js";
+import { HTTPSTATUS } from "./config/http.config.js";
 
 const app = express();
 
@@ -29,11 +32,14 @@ app.use(
   })
 );
 
-app.get("/", (req, res, next) => {
-  res.status(200).json({
-    message: "Holla Amigos",
-  });
-});
+app.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    res.status(HTTPSTATUS.OK).json({ message: "Holla Amigos!" });
+  })
+);
+
+app.use(errorHandler);
 
 app.listen(config.PORT, async () => {
   console.log(`Server running on port: ${config.PORT} in ${config.NODE_ENV}`);
