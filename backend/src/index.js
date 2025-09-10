@@ -3,6 +3,7 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import session from "cookie-session";
 import { config } from "./config/app.config.js";
+import connectDb from "./config/db.config.js";
 
 const app = express();
 
@@ -36,4 +37,5 @@ app.get("/", (req, res, next) => {
 
 app.listen(config.PORT, async () => {
   console.log(`Server running on port: ${config.PORT} in ${config.NODE_ENV}`);
+  await connectDb();
 });
